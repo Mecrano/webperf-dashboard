@@ -1,7 +1,7 @@
 import express from 'express'
 
-import utils from '../../utils'
-import db from '../../models/influxdb'
+import { audit } from '../../utils'
+import { saveData } from '../../models/influxdb'
 import Logger from '../../logger'
 
 const router = express.Router()
@@ -15,9 +15,9 @@ export const collect = router.post(
     if (!url) return res.status(400).send('/collect missing `url` data')
     try {
       console.log(`Audit for ${url}.`)
-      const { dbPayload } = await utils.audit(url)
+      const { dbPayload } = await audit(url)
       // Response filled, try to save in DB, fail silently
-      db.saveData(url, dbPayload)
+      saveData(url, dbPayload)
 
       return res.status(201).send(dbPayload)
     } catch (err) {

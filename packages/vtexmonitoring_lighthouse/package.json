@@ -4,7 +4,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "lint": "eslint --ext js,jsx,ts,tsx .",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json}\"",
+    "start": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts"
   },
   "lint-staged": {
     "*.{ts,js,tsx,jsx}": [
@@ -28,9 +29,11 @@
     "eslint-config-vtex": "12.3.2",
     "lint-staged": "10.1.1",
     "prettier": "2.0.2",
+    "ts-node": "^10.4.0",
     "typescript": "3.8.3"
   },
   "dependencies": {
+    "@influxdata/influxdb-client": "^1.20.0",
     "chrome-launcher": "^0.14.1",
     "cron": "^1.8.2",
     "express": "^4.17.1",

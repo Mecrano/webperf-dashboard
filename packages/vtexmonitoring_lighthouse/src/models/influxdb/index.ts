@@ -60,9 +60,16 @@ export const saveData = (url: string, data: DBPayload) => {
   const writeApi = client.getWriteApi(org, bucket)
   writeApi.useDefaultTags({ host: 'host1' })
 
-  const points: Point[] = Object.keys(data).map((key: string) =>
-    new Point(key).measurement(key).tag('url', url).intField(key, data[key])
-  )
+  const points: any = Object.keys(data)
+    .map((key: string) =>
+      data[key]
+        ? new Point(key)
+            .measurement(key)
+            .tag('url', url)
+            .intField(key, data[key])
+        : null
+    )
+    .filter(point => point)
 
   writeApi.writePoints(points)
   writeApi.close().catch(e => {

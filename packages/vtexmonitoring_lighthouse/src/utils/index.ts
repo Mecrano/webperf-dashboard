@@ -2,8 +2,9 @@
 /* eslint-disable no-console */
 
 import * as chromeLauncher from 'chrome-launcher'
-import { path as Rpath, pipe } from 'ramda'
-import * as lighthouse from 'lighthouse'
+import { pathOr } from 'ramda'
+// @ts-ignore
+import lighthouse from 'lighthouse'
 
 import { saveData } from '../models/influxdb'
 
@@ -118,17 +119,6 @@ const launchChromeAndRunLighthouse = async (
   return result.lhr
 }
 
-const getMaxDOMDepthCount = pipe(
-  // @ts-ignore
-  Rpath(['audits', 'dom-size', 'details', 'items', 1, 'value']),
-  parseFloat
-)
-const getMaxChildElementsCount = pipe(
-  // @ts-ignore
-  Rpath(0, ['audits', 'dom-size', 'details', 'items', 2, 'value']),
-  parseFloat
-)
-
 const filterResults = (data: LighthouseRespose): DBPayload => {
   const { categories, audits } = data
   const report = {} as DBPayload
@@ -148,13 +138,17 @@ const filterResults = (data: LighthouseRespose): DBPayload => {
   }
   // others
   // @ts-ignore
-  report['dom-max-depth'] = getMaxDOMDepthCount(data)
+  report['dom-max-depth'] = parseFloat(
+    pathOr('', ['audits', 'dom-size', 'details', 'items', 1, 'value'], data)
+  )
   // @ts-ignore
-  report['dom-max-child-elements'] = getMaxChildElementsCount(data)
+  report['dom-max-child-elements'] = parseFloat(
+    pathOr('', ['audits', 'dom-size', 'details', 'items', 2, 'value'], data)
+  )
   return report
 }
 
-const audit = async (url: string): Promise<LighthouseAuditReport> => {
+export const audit = async (url: string): Promise<LighthouseAuditReport> => {
   console.log(`Getting data for ${url}`)
   const lighthouseResponse = await launchChromeAndRunLighthouse(url, {
     extends: 'lighthouse:default',

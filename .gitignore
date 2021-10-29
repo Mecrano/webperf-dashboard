@@ -2,5 +2,5 @@
 /packages/influxdb/volume
 /packages/grafana/volume/sessions
 /packages/lighthouse/build
-/packages/lighthouse/node_modules
+/packages/**/node_modules
 /packages/lighthouse/reports

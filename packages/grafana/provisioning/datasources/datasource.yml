@@ -13,7 +13,6 @@ datasources:
     isDefault: true
     basicAuth: true
     basicAuthUser: admin
-    basicAuthPassword: admin123
     editable: true
     jsonData:
       version: Flux
@@ -21,5 +20,6 @@ datasources:
       defaultBucket: lighthouse
       httpMode: POST
     secureJsonData:
+      basicAuthPassword: admin123
       token: toad@Y#uSK62WU0LG6I^$z
 

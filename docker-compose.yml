@@ -9,59 +9,30 @@ services:
         volumes:
             - influxdb_data:/var/lib/influxdb
         environment:
-            - INFLUXDB_DB=grafana
-            - INFLUXDB_USER=grafana
-            - INFLUXDB_USER_PASSWORD=password
-            - INFLUXDB_ADMIN_ENABLED=true
-            - INFLUXDB_ADMIN_USER=admin
-            - INFLUXDB_ADMIN_PASSWORD=password
-        restart: always
+            - DOCKER_INFLUXDB_INIT_MODE=setup
+            - DOCKER_INFLUXDB_INIT_USERNAME=admin
+            - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+            - DOCKER_INFLUXDB_INIT_ORG=VTEX
+            - DOCKER_INFLUXDB_INIT_BUCKET=lighthouse
+            - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=toad@Y#uSK62WU0LG6I^$z
 
-    kapacitor:
-      container_name: kapacitor
-      image: kapacitor
-      environment:
-          KAPACITOR_HOSTNAME: kapacitor
-          KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
-      links:
-          - influxdb
-      ports:
-          - "9092:9092"
-      depends_on:
-            - influxdb
-
-    chronograf:
-        container_name: chronograf
-        image: "chronograf:latest"
-        environment:
-            INFLUXDB_URL: http://influxdb:8086
-            KAPACITOR_URL: http://kapacitor:9092
+    # DASHBOARD
+    grafana:
+        image: "grafana/grafana-enterprise:latest"
         ports:
-            - 8888:8888
-        links:
-            - influxdb
-            - kapacitor
+            - 80:3000
+        environment:
+            - GF_SECURITY_ADMIN_PASSWORD=secret
+            - GF_PANELS_DISABLE_SANITIZE_HTML=true
+        volumes:
+            - "./packages/grafana/volume:/var/lib/grafana"
+            - "./packages/grafana/provisioning:/etc/grafana/provisioning"
+            - "./packages/grafana/grafana.ini:/etc/grafana/grafana.ini"
         depends_on:
             - influxdb
-            - kapacitor
 
 volumes:
     influxdb_data:
-
-    # DASHBOARD
-    # grafana:
-    #   image: grafana/grafana
-    #   ports:
-    #     - 80:3000
-    #   environment:
-    #     - GF_SECURITY_ADMIN_PASSWORD=secret
-    #     - GF_PANELS_DISABLE_SANITIZE_HTML=true
-    #   volumes:
-    #     - "./packages/grafana/volume:/var/lib/grafana"
-    #     - "./packages/grafana/provisioning:/etc/grafana/provisioning"
-    #     - "./packages/grafana/grafana.ini:/etc/grafana/grafana.ini"
-    #   depends_on:
-    #     - influxdb
 
     # lighthouse
     # webperf-dashboard-lighthouse:

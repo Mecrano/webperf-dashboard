@@ -66,7 +66,7 @@ export const saveData = (url: string, data: DBPayload) => {
         ? new Point(key)
             .measurement(key)
             .tag('url', url)
-            .intField(key, data[key])
+            .floatField(key, data[key])
         : null
     )
     .filter(point => point)

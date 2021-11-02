@@ -101,11 +101,6 @@ interface LighthouseRespose {
   categories: typeof Categories
 }
 
-interface LighthouseAuditReport {
-  raw: LighthouseRespose
-  dbPayload: DBPayload
-}
-
 const launchChromeAndRunLighthouse = async (
   url: string,
   config: any
@@ -148,22 +143,20 @@ const filterResults = (data: LighthouseRespose): DBPayload => {
   return report
 }
 
-export const audit = async (url: string): Promise<LighthouseAuditReport> => {
+export const audit = async (url: string): Promise<DBPayload> => {
   console.log(`Getting data for ${url}`)
   const lighthouseResponse = await launchChromeAndRunLighthouse(url, {
     extends: 'lighthouse:default',
   })
   console.log(`Successfully got data for ${url}`)
-  return {
-    raw: lighthouseResponse,
-    dbPayload: filterResults(lighthouseResponse),
-  }
+
+  return filterResults(lighthouseResponse)
 }
 
-export const auditAll = async (urls: string[]): Promise<any> => {
+export const auditAll = async (urls: string[]): Promise<void> => {
   for await (const url of urls) {
     console.log(`Analyzing ${url}...`)
     const report = await audit(url)
-    await saveData(url, report.dbPayload)
+    await saveData(url, report)
   }
 }

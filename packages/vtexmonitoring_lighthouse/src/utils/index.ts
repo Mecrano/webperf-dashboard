@@ -59,29 +59,21 @@ interface DBPayload {
 interface AuditsInterface {
   description: string
   score: number | null | undefined
-  rawValue: number
+  numericValue: number | null | undefined
 }
 
 const Audits = {
   // Performance Metrics
-  'estimated-input-latency': {} as AuditsInterface,
   'first-contentful-paint': {} as AuditsInterface,
-  'first-cpu-idle': {} as AuditsInterface,
-  'first-meaningful-paint': {} as AuditsInterface,
-  interactive: {} as AuditsInterface,
   'speed-index': {} as AuditsInterface,
-  // others
+  'largest-contentful-paint': {} as AuditsInterface,
+  interactive: {} as AuditsInterface,
+  'total-blocking-time': {} as AuditsInterface,
+  'cumulative-layout-shift': {} as AuditsInterface,
+  // Others
   'dom-size': {} as AuditsInterface,
-  'errors-in-console': {} as AuditsInterface,
-  'offscreen-images': {} as AuditsInterface,
-  redirects: {} as AuditsInterface,
-  'time-to-first-byte': {} as AuditsInterface,
-  'total-byte-weight': {} as AuditsInterface,
-  'unminified-css': {} as AuditsInterface,
-  'unminified-javascript': {} as AuditsInterface,
-  'uses-passive-event-listeners': {} as AuditsInterface,
-  'uses-text-compression': {} as AuditsInterface,
   'network-requests': {} as AuditsInterface,
+  'resource-summary': {} as AuditsInterface,
 }
 
 interface CatergoryScore {
@@ -127,20 +119,37 @@ const filterResults = (data: LighthouseRespose): DBPayload => {
   for (const auditKey in Audits) {
     if (!Object.prototype.hasOwnProperty.call(audits, auditKey)) continue
     // @ts-ignore
-    const { rawValue, score } = audits[auditKey]
-    rawValue !== undefined && (report[auditKey] = rawValue)
+    const { numericValue, score } = audits[auditKey]
+    numericValue !== undefined && (report[auditKey] = numericValue)
     score !== undefined && (report[`${auditKey}-score`] = score)
   }
   // others
   // @ts-ignore
-  report['dom-max-depth'] = parseFloat(
-    pathOr('', ['audits', 'dom-size', 'details', 'items', 1, 'value'], data)
+  report['network-requests'] = parseFloat(
+    pathOr('', ['network-requests', 'details', 'items', 'length'], audits)
   )
-  // @ts-ignore
-  report['dom-max-child-elements'] = parseFloat(
-    pathOr('', ['audits', 'dom-size', 'details', 'items', 2, 'value'], data)
-  )
+
+  const resources = pathOr([], ['resource-summary', 'details', 'items'], audits)
+
+  for (const resource of resources) {
+    const { resourceType, transferSize, requestCount } = resource
+    report[`resource-summary-size-${resourceType}`] = parseFloat(transferSize)
+    report[`resource-summary-request-${resourceType}`] = parseFloat(
+      requestCount
+    )
+  }
+
   return report
+}
+
+export const auditRaw = async (url: string): Promise<any> => {
+  console.log(`Getting data for ${url}`)
+  const lighthouseResponse = await launchChromeAndRunLighthouse(url, {
+    extends: 'lighthouse:default',
+  })
+  console.log(`Successfully got data for ${url}`)
+
+  return lighthouseResponse
 }
 
 export const audit = async (url: string): Promise<DBPayload> => {

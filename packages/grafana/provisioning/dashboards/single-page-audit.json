@@ -564,14 +564,14 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 7,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -594,20 +594,30 @@
               "mode": "off"
             }
           },
+          "displayName": "First Contentful Paint (FCP)",
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "blue",
                 "value": null
               },
               {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 1800
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 3000
               }
             ]
-          }
+          },
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -620,8 +630,12 @@
       "id": 20,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -630,7 +644,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"first-contentful-paint-score\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"first-contentful-paint-score\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"first-contentful-paint\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"first-contentful-paint\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
           "refId": "A"
         }
       ],
@@ -639,18 +653,18 @@
     },
     {
       "datasource": null,
-      "description": "First Meaningful Paint measures when the primary content of a page is visible.",
+      "description": "Interactive marks the time at which the page is fully interactive.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 7,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -673,20 +687,30 @@
               "mode": "off"
             }
           },
+          "displayName": "Time to Interactive",
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "blue",
                 "value": null
               },
               {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 3900
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 7300
               }
             ]
-          }
+          },
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -696,11 +720,15 @@
         "x": 12,
         "y": 18
       },
-      "id": 22,
+      "id": 24,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -709,11 +737,11 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"first-meaningful-paint-score\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"first-meaningful-paint-score\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"interactive\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"interactive\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
           "refId": "A"
         }
       ],
-      "title": "First Meaningful Paint",
+      "title": "Time to Interactive",
       "type": "timeseries"
     },
     {
@@ -721,7 +749,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr",
+            "mode": "thresholds",
             "seriesBy": "last"
           },
           "custom": {
@@ -730,7 +758,7 @@
             "axisPlacement": "left",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 7,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -758,23 +786,29 @@
           },
           "displayName": "Speed Index",
           "mappings": [],
-          "max": 1,
-          "min": 0,
           "noValue": "null",
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "blue",
                 "value": null
               },
               {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 3400
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 5800
               }
             ]
           },
-          "unit": "locale"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -801,7 +835,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed-index-score\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"speed-index-score\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"speed-index\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"speed-index\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
           "refId": "A"
         }
       ],
@@ -810,18 +844,18 @@
     },
     {
       "datasource": null,
-      "description": "Interactive marks the time at which the page is fully interactive.",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 7,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -844,17 +878,210 @@
               "mode": "off"
             }
           },
+          "displayName": "Total Blocking Time",
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "blue",
                 "value": null
               },
               {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 200
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 600
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 26
+      },
+      "id": 22,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"total-blocking-time\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"total-blocking-time\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Blocking Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Largest Contentful Paint (LCP)",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 2500
+              },
+              {
+                "color": "red",
+                "value": 4000
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 34
+      },
+      "id": 36,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"largest-contentful-paint\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"largest-contentful-paint\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Largest Contentful Paint (LCP)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Cumulative Layout Shift (CLS)",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 0.1
+              },
+              {
+                "color": "red",
+                "value": 0.25
               }
             ]
           }
@@ -865,13 +1092,17 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 26
+        "y": 34
       },
-      "id": 24,
+      "id": 38,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -880,11 +1111,11 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"interactive-score\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"interactive-score\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"cumulative-layout-shift\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"cumulative-layout-shift\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
           "refId": "A"
         }
       ],
-      "title": "Time to Interactive",
+      "title": "Cumulative Layout Shift (CLS)",
       "type": "timeseries"
     },
     {
@@ -894,7 +1125,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 42
       },
       "id": 2,
       "panels": [],
@@ -913,7 +1144,7 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 7,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -936,7 +1167,10 @@
               "mode": "off"
             }
           },
+          "displayName": "DOM Size score",
           "mappings": [],
+          "max": 1,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -949,21 +1183,26 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "percentunit"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 12,
         "x": 0,
-        "y": 35
+        "y": 43
       },
       "id": 26,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -976,7 +1215,7 @@
           "refId": "A"
         }
       ],
-      "title": "DOM nodes count score",
+      "title": "DOM Size score",
       "type": "timeseries"
     },
     {
@@ -984,14 +1223,14 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 7,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -1014,173 +1253,26 @@
               "mode": "off"
             }
           },
+          "displayName": "DOM Size",
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "blue",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 35
-      },
-      "id": 28,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"dom-max-depth\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"dom-max-depth\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
-          "refId": "A"
-        }
-      ],
-      "title": "DOM max nodes depth",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
                 "color": "green",
-                "value": null
+                "value": 0.0001
+              },
+              {
+                "color": "#EAB839",
+                "value": 800
               },
               {
                 "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 35
-      },
-      "id": 30,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"dom-max-child-elements\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"dom-max-child-elements\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
-          "refId": "A"
-        }
-      ],
-      "title": "DOM Max child nodes",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
+                "value": 1400
               }
             ]
           }
@@ -1190,14 +1282,18 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 43
       },
-      "id": 32,
+      "id": 28,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -1206,7 +1302,91 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"total-byte-weight-score\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"total-byte-weight-score\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"dom-size\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"dom-size\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
+          "refId": "A"
+        }
+      ],
+      "title": "DOM Size",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 7,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Total Bytes Downloaded",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 51
+      },
+      "id": 32,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"resource-summary-size-total\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"resource-summary-size-total\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
           "refId": "A"
         }
       ],
@@ -1225,7 +1405,7 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 7,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -1248,6 +1428,7 @@
               "mode": "off"
             }
           },
+          "displayName": "Network Requests",
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -1269,21 +1450,179 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 43
+        "y": 51
       },
       "id": 34,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
           "mode": "single"
         }
       },
+      "targets": [
+        {
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"network-requests\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"network-requests\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"${url}\")",
+          "refId": "A"
+        }
+      ],
       "title": "Network Requests",
       "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 500000
+              },
+              {
+                "color": "red",
+                "value": 1000000
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "resource-summary-size-image resource-summary-size-image {host=\"host1\", url=\"http://www.exito.com/\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Images"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "resource-summary-size-document resource-summary-size-document {host=\"host1\", url=\"http://www.exito.com/\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Documents"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "resource-summary-size-font resource-summary-size-font {host=\"host1\", url=\"http://www.exito.com/\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Fonts"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "resource-summary-size-other resource-summary-size-other {host=\"host1\", url=\"http://www.exito.com/\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Others"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "resource-summary-size-script resource-summary-size-script {host=\"host1\", url=\"http://www.exito.com/\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Scripts"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "resource-summary-size-stylesheet resource-summary-size-stylesheet {host=\"host1\", url=\"http://www.exito.com/\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Styles"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "resource-summary-size-third-party resource-summary-size-third-party {host=\"host1\", url=\"http://www.exito.com/\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Third party"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 59
+      },
+      "id": 40,
+      "options": {
+        "displayMode": "basic",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "8.2.2",
+      "targets": [
+        {
+          "query": "from(bucket: \"lighthouse\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"resource-summary-size-document\" or r[\"_measurement\"] == \"resource-summary-size-font\" or r[\"_measurement\"] == \"resource-summary-size-image\" or r[\"_measurement\"] == \"resource-summary-size-other\" or r[\"_measurement\"] == \"resource-summary-size-script\" or r[\"_measurement\"] == \"resource-summary-size-stylesheet\" or r[\"_measurement\"] == \"resource-summary-size-third-party\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"resource-summary-size-document\" or r[\"_field\"] == \"resource-summary-size-font\" or r[\"_field\"] == \"resource-summary-size-image\" or r[\"_field\"] == \"resource-summary-size-other\" or r[\"_field\"] == \"resource-summary-size-script\" or r[\"_field\"] == \"resource-summary-size-stylesheet\" or r[\"_field\"] == \"resource-summary-size-third-party\")\r\n  |> filter(fn: (r) => r[\"host\"] == \"host1\")\r\n  |> filter(fn: (r) => r[\"url\"] == \"http://www.exito.com/\")\r\n  |> sort()",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Total Bytes Downloaded by Type",
+      "transformations": [],
+      "transparent": true,
+      "type": "bargauge"
     }
   ],
   "schemaVersion": 31,

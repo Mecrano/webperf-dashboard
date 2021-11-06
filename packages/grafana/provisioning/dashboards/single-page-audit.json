@@ -1655,6 +1655,37 @@
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "mobile",
+          "value": "mobile"
+        },
+        "description": "Device measured",
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Device",
+        "multi": false,
+        "name": "device",
+        "options": [
+          {
+            "selected": true,
+            "text": "mobile",
+            "value": "mobile"
+          },
+          {
+            "selected": false,
+            "text": "desktop",
+            "value": "desktop"
+          }
+        ],
+        "query": "mobile,desktop",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },

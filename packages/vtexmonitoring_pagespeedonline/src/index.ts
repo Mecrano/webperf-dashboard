@@ -12,7 +12,7 @@ app.listen(3000, () => {
         if (!cron) return
         new CronJob(
             cron,
-            () => auditAll(urls, 'mobile'),
+            () => auditAll(urls),
             null,
             true,
             'Europe/London',

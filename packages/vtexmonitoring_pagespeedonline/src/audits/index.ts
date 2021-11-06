@@ -5,19 +5,23 @@ import {
 import { pathOr } from 'ramda'
 
 import { saveData } from '../influxdb'
-import { scoresToMeasure } from '../utils/constants'
+import { scoresToMeasure, devices } from '../utils/constants'
 
 const filterResults = ({
   lighthouseResult,
 }: Partial<pagespeedonline_v5.Schema$PagespeedApiPagespeedResponseV5>) => {
-  const { categories, audits }: Partial<pagespeedonline_v5.Schema$LighthouseResultV5> = lighthouseResult ?? {}
+  const {
+    categories,
+    audits,
+  }: Partial<pagespeedonline_v5.Schema$LighthouseResultV5> =
+    lighthouseResult ?? {}
   const report: any = {}
 
-  
   if (categories) {
     // Get Categories Scores
     for (const categoryKey of Object.keys(categories)) {
-      if (!Object.prototype.hasOwnProperty.call(categories, categoryKey)) continue
+      if (!Object.prototype.hasOwnProperty.call(categories, categoryKey))
+        continue
       // @ts-ignore
       report[`${categoryKey}-score`] = categories[categoryKey].score
     }
@@ -68,13 +72,12 @@ const audit = async (url: string, device: string): Promise<any> => {
   return filterResults(data)
 }
 
-export const auditAll = async (
-  urls: string[],
-  device: string
-): Promise<void> => {
-  for await (const url of urls) {
-    console.log(`Analyzing ${url}...`)
-    const report = await audit(url, device)
-    await saveData(url, report, device)
+export const auditAll = async (urls: string[]): Promise<void> => {
+  for await (const device of devices) {
+    for await (const url of urls) {
+      console.log(`Analyzing ${url}...`)
+      const report = await audit(url, device)
+      await saveData(url, report, device)
+    }
   }
 }

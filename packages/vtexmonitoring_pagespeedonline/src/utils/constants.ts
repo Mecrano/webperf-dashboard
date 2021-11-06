@@ -11,3 +11,8 @@ export const scoresToMeasure = [
     'network-requests',
     'resource-summary',
 ]
+
+export const devices = [
+    'mobile',
+    'desktop'
+]

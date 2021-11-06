@@ -57,7 +57,7 @@ interface DBPayload {
 }
 
 export const saveData = (url: string, data: DBPayload, device: string) => {
-  const writeApi = client.getWriteApi(org, `${bucket}-${device}`)
+  const writeApi = client.getWriteApi(org, bucket)
   writeApi.useDefaultTags({ host: 'host1' })
 
   const points: any = Object.keys(data)
@@ -66,6 +66,7 @@ export const saveData = (url: string, data: DBPayload, device: string) => {
         ? new Point(key)
             .measurement(key)
             .tag('url', url)
+            .tag('device', device)
             .floatField(key, data[key])
         : null
     )

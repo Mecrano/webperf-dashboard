@@ -56,8 +56,8 @@ interface DBPayload {
   'network-requests': number
 }
 
-export const saveData = (url: string, data: DBPayload) => {
-  const writeApi = client.getWriteApi(org, bucket)
+export const saveData = (url: string, data: DBPayload, device: string) => {
+  const writeApi = client.getWriteApi(org, `${bucket}-${device}`)
   writeApi.useDefaultTags({ host: 'host1' })
 
   const points: any = Object.keys(data)

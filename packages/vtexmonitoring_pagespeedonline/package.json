@@ -1,0 +1,42 @@
+{
+  "name": "vtexmonitoring_pagespeedonline",
+  "version": "0.0.1",
+  "description": "Uses pagespeedonline API",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ext js,jsx,ts,tsx .",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json}\"",
+    "start": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts"
+  },
+  "lint-staged": {
+    "*.{ts,js,tsx,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,graphql,gql}": [
+      "prettier --write"
+    ]
+  },
+  "author": "Edwin Obando",
+  "license": "ISC",
+  "dependencies": {
+    "@googleapis/pagespeedonline": "^0.2.0",
+    "@influxdata/influxdb-client": "^1.20.0",
+    "cron": "^1.8.2",
+    "express": "^4.17.1",
+    "ramda": "^0.27.1"
+  },
+  "devDependencies": {
+    "@types/cron": "^1.7.3",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.6",
+    "@types/ramda": "^0.27.46",
+    "@vtex/prettier-config": "^0.3.6",
+    "@vtex/tsconfig": "^0.6.0",
+    "eslint-config-vtex": "^14.1.1",
+    "lint-staged": "^11.2.6",
+    "prettier": "^2.4.1",
+    "ts-node": "^10.4.0",
+    "typescript": "3.8.3"
+  }
+}
